@@ -4,22 +4,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import ActionGrade from 'material-ui/svg-icons/action/grade';
-import DatePicker from 'material-ui/DatePicker';
+import TextField from 'material-ui/TextField';
+import './App.css';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
-import Badge from 'material-ui/Badge';
-import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
-import {red500, yellow500, blue500, cyan100} from 'material-ui/styles/colors';
-import Paper from 'material-ui/Paper';
-import FontIcon from 'material-ui/FontIcon';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import IconLocationOn from 'material-ui/svg-icons/communication/location-on';
-import Snackbar from 'material-ui/Snackbar';
-import TextField from 'material-ui/TextField';
-import LinearProgress from 'material-ui/LinearProgress';
-import './App.css';
+import moment from 'moment';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -34,51 +23,98 @@ const style = {
   margin: 20,
 };
 
-const recentsIcon = <FontIcon className="material-icons">restore</FontIcon>;
-const favoritesIcon = <FontIcon className="material-icons">favorite</FontIcon>;
-const nearbyIcon = <IconLocationOn />;
-
-const LinearProgressExampleSimple = () => (
-  <LinearProgress mode="indeterminate" />
-);
-
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       open: false,
-      artistName: ""
+      artistName: "",
+      data: [],
+      tableData: []
     };
+    this.searchArtist=this.searchArtist.bind(this);
+    this.handleSumbit=this.handleSumbit.bind(this);
+    this.menuDrawer=this.menuDrawer.bind(this);
   }
 
 searchArtist(event,newvalue){
   console.log(newvalue);
-  
-}
+  this.setState({
+    artistName: newvalue
+  })
+  console.log(this.state);
+};
 
 handleSumbit(event){
-  console.log(event);
+  console.log("-----handleSumbit-----");
+  console.log(this.state);
+  console.log("-----handleSumbit-----");
+  var url = "https://rest.bandsintown.com/artists/"+this.state.artistName+"/events?app_id=boo"
+  console.log(url);
+    fetch(url, {
+      method: "GET"
+    })
+    .then((responseData) => {
+      return responseData.json();
+    })
+    .catch((error) => {
+      console.log("Error Message: " + error);
+    })
+    .then((responseJSON) => {
+      console.log(responseJSON)
+      // this.setState=({
+      //   data:responseJSON
+      // })
+      const rowInfo=responseJSON.map((element) =>
+        <tr>
+          <td>{element.lineup}</td>
+          <td>{element.venue.city}</td>
+          <td>{element.venue.name}</td>
+          <td>{moment(element.datetime).format('llll')}</td>
+          <td>
+          <RaisedButton label="Tickets" secondary={true} href={element.url} target="#"/ >
+          </td>
+        </tr>
+      )
+
+      this.setState({
+        tableData: rowInfo
+      })
+    })
+    .catch((errorJSON) => {
+      console.log(errorJSON)
+    });
+  };
+
+handleToggle = () => this.setState({open: !this.state.open});
+
+handleClose = () => this.setState({open: false});
+
+menuDrawer = () => {
+  // open when someone clicks
+  this.setState({open:true})
+  console.log("BLUE BLAH");
 }
 
   render() {
     return (
+      <div>
       <MuiThemeProvider muiTheme={muiTheme}>
-
-        <AppBar title="My AppBar" >
-          <Badge
-            badgeContent={10}
-            secondary={true}
-            badgeStyle={{top: 12, right: 19}}
-          >
-            <IconButton tooltip="Notifications">
-              <NotificationsIcon color="black"/>
-            </IconButton>
-          </Badge>
-        </ AppBar>
-
-         <br />
-
+        <AppBar title="Find a show near you" showMenuIconButton={true} onLeftIconButtonClick={this.menuDrawer} >
+        </AppBar>
+        <Drawer
+                  docked={false}
+                  width={200}
+                  open={this.state.open}
+                  onRequestChange={(open) => this.setState({open})}
+                >
+                <MenuItem value="1" primaryText="Menu"/>
+                <MenuItem value="2" primaryText="Bands In Town" href="https://news.bandsintown.com/home" target="#" />
+                <MenuItem value="3" primaryText="Spotify" href="https://www.spotify.com/us/" target="#" />
+                <MenuItem value="4" primaryText="Pandora" href="https://www.pandora.com/" target="#" />
+                <MenuItem value="5" primaryText="Twitter" href="https://twitter.com/?lang=en" target="#" />
+                <MenuItem value="6" primaryText="Facebook" href="https://www.facebook.com/" target="#" />
+                </Drawer>
          <div className="main">
 
          <TextField
@@ -90,28 +126,31 @@ handleSumbit(event){
           <RaisedButton label="Search" secondary={true} style={style} onClick={this.handleSumbit}
           />
         </div>
-
-        <Paper zDepth={1}>
-            <BottomNavigation selectedIndex={this.state.selectedIndex} color={cyan100}>
-              <BottomNavigationItem
-                label="Recents"
-                icon={recentsIcon}
-                onClick={() => this.select(0)}
-              />
-              <BottomNavigationItem
-                label="Favorites"
-                icon={favoritesIcon}
-                onClick={() => this.select(1)}
-              />
-              <BottomNavigationItem
-                label="Nearby"
-                icon={nearbyIcon}
-                onClick={() => this.select(2)}
-              />
-            </BottomNavigation>
-      </Paper>
-
+        <br />
+        <br />
+        <br />
+        <br />
+        <table>
+          <tbody>
+          <tr>
+            <th><u>Artist</u></th>
+            <th><u>City</u></th>
+            <th><u>Venue</u></th>
+            <th><u>Date</u></th>
+            <th><u>Tickets</u></th>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          {this.state.tableData}
+          </tbody>
+        </table>
     </MuiThemeProvider>
+  </ div>
     );
   }
 }

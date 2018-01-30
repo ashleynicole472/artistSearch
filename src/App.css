@@ -5,6 +5,31 @@
   align-content: space-around;
 }
 
+table {
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+    text-align: center;
+    color: #003c5e;
+}
+
+th {
+  text-align: center;
+}
+
+tr:nth-child(even) {
+    background-color: #d6f0f3;
+}
+tr:nth-child(odd) {
+    background-color: #4ac0dd;
+}
+
 .App {
   text-align: center;
 }
