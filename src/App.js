@@ -145,11 +145,11 @@ menuDrawer = () => {
             <table>
               <tbody>
                 <tr>
-                  <th><u>Artist</u></th>
-                  <th><u>City</u></th>
-                  <th><u>Venue</u></th>
-                  <th><u>Date</u></th>
-                  <th><u>Tickets</u></th>
+                  <th>Artist</th>
+                  <th>City</th>
+                  <th>Venue</th>
+                  <th>Date</th>
+                  <th>Tickets</th>
                 </tr>
                 <tr>
                   <td></td>
