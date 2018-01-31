@@ -5,10 +5,11 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
 import AppBar from 'material-ui/AppBar';
 import TextField from 'material-ui/TextField';
-import './App.css';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
 import moment from 'moment';
+
+import './App.css';
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -38,17 +39,12 @@ class App extends Component {
   }
 
 searchArtist(event,newvalue){
-  console.log(newvalue);
   this.setState({
     artistName: newvalue
   })
-  console.log(this.state);
 };
 
 handleSumbit(event){
-  console.log("-----handleSumbit-----");
-  console.log(this.state);
-  console.log("-----handleSumbit-----");
   var url = "https://rest.bandsintown.com/artists/"+this.state.artistName+"/events?app_id=boo"
   console.log(url);
     fetch(url, {
@@ -61,10 +57,6 @@ handleSumbit(event){
       console.log("Error Message: " + error);
     })
     .then((responseJSON) => {
-      console.log(responseJSON)
-      // this.setState=({
-      //   data:responseJSON
-      // })
       const rowInfo=responseJSON.map((element) =>
         <tr>
           <td>{element.lineup}</td>
@@ -76,81 +68,86 @@ handleSumbit(event){
           </td>
         </tr>
       )
-
       this.setState({
         tableData: rowInfo
       })
     })
     .catch((errorJSON) => {
-      console.log(errorJSON)
     });
   };
 
-handleToggle = () => this.setState({open: !this.state.open});
+handleToggle = () =>
+  this.setState({
+    open: !this.state.open
+  });
 
-handleClose = () => this.setState({open: false});
+handleClose = () =>
+  this.setState({
+    open: false
+  });
 
 menuDrawer = () => {
   // open when someone clicks
-  this.setState({open:true})
-  console.log("BLUE BLAH");
+  this.setState({
+    open:true
+  });
 }
 
   render() {
     return (
-      <div>
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <AppBar title="Find a show near you" showMenuIconButton={true} onLeftIconButtonClick={this.menuDrawer} >
-        </AppBar>
-        <Drawer
-                  docked={false}
-                  width={200}
-                  open={this.state.open}
-                  onRequestChange={(open) => this.setState({open})}
-                >
-                <MenuItem value="1" primaryText="Menu"/>
-                <MenuItem value="2" primaryText="Bands In Town" href="https://news.bandsintown.com/home" target="#" />
-                <MenuItem value="3" primaryText="Spotify" href="https://www.spotify.com/us/" target="#" />
-                <MenuItem value="4" primaryText="Pandora" href="https://www.pandora.com/" target="#" />
-                <MenuItem value="5" primaryText="Twitter" href="https://twitter.com/?lang=en" target="#" />
-                <MenuItem value="6" primaryText="Facebook" href="https://www.facebook.com/" target="#" />
-                </Drawer>
-         <div className="main">
+          <div>
+          <MuiThemeProvider muiTheme={muiTheme}>
+            <AppBar title="Find a show near you" showMenuIconButton={true} onLeftIconButtonClick={this.menuDrawer} >
+            </AppBar>
+            <Drawer
+              docked={false}
+              width={200}
+              open={this.state.open}
+              onRequestChange={(open) =>
+                this.setState({open})}
+            >
+            <MenuItem value="1" primaryText="Menu"/>
+              <MenuItem value="2" primaryText="Bands In Town" href="https://news.bandsintown.com/home" target="#" />
+              <MenuItem value="3" primaryText="Spotify" href="https://www.spotify.com/us/" target="#" />
+              <MenuItem value="4" primaryText="Pandora" href="https://www.pandora.com/" target="#" />
+              <MenuItem value="5" primaryText="Twitter" href="https://twitter.com/?lang=en" target="#" />
+              <MenuItem value="6" primaryText="Facebook" href="https://www.facebook.com/" target="#" />
+            </Drawer>
+            <div className="main">
+              <TextField
+                hintText="Search for an artist"
+                floatingLabelText="Search for an artist"
+                onChange={this.searchArtist}
+              />
 
-         <TextField
-          hintText="Search for an artist"
-          floatingLabelText="Search for an artist"
-          onChange={this.searchArtist}
-         />
-
-          <RaisedButton label="Search" secondary={true} style={style} onClick={this.handleSumbit}
-          />
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <table>
-          <tbody>
-          <tr>
-            <th><u>Artist</u></th>
-            <th><u>City</u></th>
-            <th><u>Venue</u></th>
-            <th><u>Date</u></th>
-            <th><u>Tickets</u></th>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          {this.state.tableData}
-          </tbody>
-        </table>
-    </MuiThemeProvider>
-  </ div>
+              <RaisedButton label="Search" secondary={true} style={style} onClick={this.handleSumbit}
+              />
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <table>
+              <tbody>
+                <tr>
+                  <th><u>Artist</u></th>
+                  <th><u>City</u></th>
+                  <th><u>Venue</u></th>
+                  <th><u>Date</u></th>
+                  <th><u>Tickets</u></th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              {this.state.tableData}
+              </tbody>
+            </table>
+        </MuiThemeProvider>
+      </ div>
     );
   }
 }
