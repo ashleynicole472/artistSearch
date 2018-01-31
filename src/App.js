@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-import {cyan500} from 'material-ui/styles/colors';
+import Footer from './Footer.js'
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import AppBar from 'material-ui/AppBar';
+import {cyan500} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
+import AppBar from 'material-ui/AppBar';
 import moment from 'moment';
 
 import './App.css';
@@ -44,6 +46,7 @@ searchArtist(event,newvalue){
   })
 };
 
+//function to full searched artist from Bands In Town API
 handleSumbit(event){
   var url = "https://rest.bandsintown.com/artists/"+this.state.artistName+"/events?app_id=boo"
   console.log(url);
@@ -58,6 +61,10 @@ handleSumbit(event){
     })
     .then((responseJSON) => {
       const rowInfo=responseJSON.map((element) =>
+      //Function to allow only specific data from the object to be
+      //displayed on the table in the frontend
+      //moment allows the date to be formated in a specific way choosen
+      //from moments website
         <tr>
           <td>{element.lineup}</td>
           <td>{element.venue.city}</td>
@@ -76,12 +83,14 @@ handleSumbit(event){
     });
   };
 
+//menu drawer functions:
 handleToggle = () =>
   this.setState({
     open: !this.state.open
   });
 
 handleClose = () =>
+  //menu drawer closes when click anywhere off the menu
   this.setState({
     open: false
   });
@@ -99,6 +108,7 @@ menuDrawer = () => {
           <MuiThemeProvider muiTheme={muiTheme}>
             <AppBar title="Find a show near you" showMenuIconButton={true} onLeftIconButtonClick={this.menuDrawer} >
             </AppBar>
+
             <Drawer
               docked={false}
               width={200}
@@ -113,6 +123,7 @@ menuDrawer = () => {
               <MenuItem value="5" primaryText="Twitter" href="https://twitter.com/?lang=en" target="#" />
               <MenuItem value="6" primaryText="Facebook" href="https://www.facebook.com/" target="#" />
             </Drawer>
+
             <div className="main">
               <TextField
                 hintText="Search for an artist"
@@ -120,7 +131,11 @@ menuDrawer = () => {
                 onChange={this.searchArtist}
               />
 
-              <RaisedButton label="Search" secondary={true} style={style} onClick={this.handleSumbit}
+              <RaisedButton
+                label="Search"
+                secondary={true}
+                style={style}
+                onClick={this.handleSumbit}
               />
             </div>
             <br />
@@ -147,6 +162,7 @@ menuDrawer = () => {
               </tbody>
             </table>
         </MuiThemeProvider>
+        <Footer />
       </ div>
     );
   }
