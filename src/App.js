@@ -4,7 +4,7 @@ import Footer from './Footer.js'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import RaisedButton from 'material-ui/RaisedButton';
-import {cyan500} from 'material-ui/styles/colors';
+import {cyan500,purple400} from 'material-ui/styles/colors';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/MenuItem';
 import Drawer from 'material-ui/Drawer';
@@ -134,7 +134,7 @@ menuDrawer = () => {
               <RaisedButton
                 label="Search"
                 secondary={true}
-                style={style}
+                style={purple400}
                 onClick={this.handleSumbit}
               />
             </div>
